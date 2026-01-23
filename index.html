@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoManager - Car Dealer System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <nav class="sidebar">
+        <h2>AutoManager</h2>
+        <ul>
+            <li onclick="showSection('home')" class="active">Home</li>
+            <li onclick="showSection('dashboard')">Dashboard</li>
+            <li onclick="showSection('inventory')">Inventory</li>
+            <li onclick="showSection('customers')">Customers</li>
+        </ul>
+    </nav>
+
+    <main class="content">
+        
+        <section id="home" class="section active-section">
+            <div class="hero">
+                <h1>AutoManager Elite</h1>
+                <p>Welcome to our showroom management system.</p>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card">
+                    <h3>🛠️ Project Backend</h3>
+                    <p>This system uses a MySQL database (car_dealer) with:</p>
+                    <ul class="clean-list">
+                        <li>Tables for Vehicles, Customers, and Sales.</li>
+                        <li>Triggers to auto-update car status to 'Sold'.</li>
+                        <li>Validation to check 10-digit phone numbers.</li>
+                    </ul>
+                </div>
+                
+                <div class="info-card">
+                    <h3>📞 Contact Info</h3>
+                    <p><strong>Location:</strong> 123 Tech Park, Chennai</p>
+                    <p><strong>Email:</strong> help@automanager.com</p>
+                    <p><strong>Hours:</strong> 9:00 AM - 6:00 PM</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard" class="section">
+            <h1>Dashboard Overview</h1>
+            <div class="cards-container">
+                <div class="card">
+                    <h3>Total Cars</h3>
+                    <p id="total-cars">0</p>
+                </div>
+                <div class="card">
+                    <h3>Cars Sold</h3>
+                    <p id="total-sold">0</p>
+                </div>
+                <div class="card">
+                    <h3>Revenue</h3>
+                    <p id="total-revenue">$0</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="inventory" class="section">
+            <div class="header-flex">
+                <h1>Vehicle Inventory</h1>
+                <button class="btn-primary" onclick="openModal('vehicleModal')">+ Add Vehicle</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>VIN</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Year</th>
+                        <th>Price</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="vehicle-table-body"></tbody>
+            </table>
+        </section>
+
+        <section id="customers" class="section">
+            <h1>Customer Database</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody id="customer-table-body"></tbody>
+            </table>
+        </section>
+    </main>
+</div>
+
+<div id="vehicleModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Add New Vehicle</h2>
+            <span class="close" onclick="closeModal('vehicleModal')">&times;</span>
+        </div>
+        <form id="addVehicleForm">
+            <input type="text" id="vin" placeholder="VIN Number" required>
+            <input type="text" id="make" placeholder="Make" required>
+            <input type="text" id="model" placeholder="Model" required>
+            <input type="number" id="year" placeholder="Year" required>
+            <input type="number" id="price" placeholder="Price" required>
+            <button type="submit" class="btn-primary">Save to Inventory</button>
+        </form>
+    </div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
