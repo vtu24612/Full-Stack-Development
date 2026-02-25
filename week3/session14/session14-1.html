@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Match Scoreboard — ES6 State</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: linear-gradient(145deg, #0f2233 0%, #071726 100%);
+      --card-bg: rgba(255,255,255,0.06);
+      --muted: #8eaec6;
+      --accent: #ffd36b;
+      --accent-2: #f39c4a;
+      --btn: #2f6ea4;
+      --btn-reset: #6f4b3a;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .scoreboard-card {
+      max-width: 700px;
+      width: 100%;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 3.5rem;
+      padding: 2.5rem 2rem;
+      box-shadow: 0 40px 60px -20px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      text-align: center;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #f9d56b, #f8b56c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.3rem;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      font-size: 1.1rem;
+      border-bottom: 1px dashed #3a5b7c;
+      padding-bottom: 0.8rem;
+    }
+
+    /* score grid */
+    .match-display {
+      display: grid;
+      grid-template-columns: 1fr 0.7fr 1fr;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .team-card {
+      background: rgba(20,40,60,0.6);
+      border-radius: 2.5rem;
+      padding: 1.8rem 1rem;
+      text-align: center;
+      border: 1px solid #3c6085;
+      box-shadow: 0 8px 0 #0a1c2c;
+    }
+
+    .team-name {
+      font-size: 1.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+    }
+
+    .team-score {
+      font-size: 5.5rem;
+      font-weight: 800;
+      line-height: 1;
+      margin: 0.5rem 0 0.2rem;
+      color: #f8f9fc;
+      text-shadow: 0 4px 0 #0e2d46;
+    }
+
+    .vs-divider {
+      font-size: 2.2rem;
+      font-weight: 800;
+      text-align: center;
+      color: var(--accent-2);
+      background: rgba(31,63,92,0.35);
+      border-radius: 60px;
+      padding: 0.5rem 0;
+    }
+
+    /* control panels */
+    .control-panel {
+      background: rgba(18,40,60,0.55);
+      border-radius: 3rem;
+      padding: 2rem 1.5rem;
+      border: 1px solid #345980;
+      margin-top: 1rem;
+    }
+
+    .panel-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      background: var(--btn);
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 1rem 0.5rem;
+      border-radius: 60px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: all 0.08s;
+      box-shadow: 0 5px 0 #12304b;
+      border: 1px solid #49749b;
+    }
+
+    .btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 #12304b;
+    }
+
+    .btn.reset {
+      background: var(--btn-reset);
+      box-shadow: 0 5px 0 #2f221a;
+      border-color: #886b4b;
+      font-size: 1.2rem;
+    }
+
+    .btn.special {
+      background: #206064;
+      box-shadow: 0 5px 0 #0f3a3d;
+    }
+
+    .score-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .state-badge {
+      background: #102433;
+      padding: 1rem 1.5rem;
+      border-radius: 60px;
+      font-family: monospace;
+      font-size: 1.2rem;
+      color: #b2d3f0;
+      border: 1px solid #32567a;
+      word-break: break-word;
+    }
+
+    .code-note {
+      background: #0d1f2e;
+      border-radius: 2rem;
+      padding: 1rem 1.8rem;
+      color: #cddcec;
+      font-size: 0.95rem;
+      border: 1px solid #264c70;
+      margin-top: 2rem;
+    }
+
+    .highlight {
+      color: #f7c46b;
+      font-weight: 600;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 1.8rem;
+      color: #708eb0;
+    }
+  </style>
+</head>
+<body>
+  <div class="scoreboard-card">
+    <h1>⚽ MATCH SCORE</h1>
+    <div class="subtitle">state management · <code>let</code> & <code>const</code> (ES6)</div>
+
+    <!-- main score display -->
+    <div class="match-display">
+      <div class="team-card">
+        <div class="team-name">HOME</div>
+        <div class="team-score" id="homeScoreDisplay">0</div>
+      </div>
+      <div class="vs-divider">VS</div>
+      <div class="team-card">
+        <div class="team-name">AWAY</div>
+        <div class="team-score" id="awayScoreDisplay">0</div>
+      </div>
+    </div>
+
+    <!-- control panel with buttons to update state -->
+    <div class="control-panel">
+      <div class="panel-title">
+        <span>🎮</span> score controls (let/const in action)
+      </div>
+
+      <!-- HOME team actions -->
+      <div class="score-actions">
+        <button class="btn" id="homePlus1">HOME +1</button>
+        <button class="btn" id="homePlus2">HOME +2</button>
+        <button class="btn" id="homePlus3">HOME +3</button>
+      </div>
+      <div class="score-actions" style="margin-top: 0.5rem;">
+        <button class="btn" id="homeMinus1" style="background:#724242;">HOME -1</button>
+        <button class="btn reset" id="homeReset">HOME reset</button>
+      </div>
+
+      <!-- AWAY team actions -->
+      <div class="score-actions" style="margin-top: 1.5rem;">
+        <button class="btn" id="awayPlus1">AWAY +1</button>
+        <button class="btn" id="awayPlus2">AWAY +2</button>
+        <button class="btn" id="awayPlus3">AWAY +3</button>
+      </div>
+      <div class="score-actions" style="margin-top: 0.5rem;">
+        <button class="btn" id="awayMinus1" style="background:#724242;">AWAY -1</button>
+        <button class="btn reset" id="awayReset">AWAY reset</button>
+      </div>
+
+      <!-- global actions -->
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button class="btn special" id="swapTeams">🔄 swap scores</button>
+        <button class="btn reset" id="globalReset">⚡ full reset</button>
+      </div>
+
+      <!-- current state display (reflects variables) -->
+      <div class="state-badge" id="stateDisplay">
+        let home = 0 · let away = 0
+      </div>
+    </div>
+
+    <!-- explanation of ES6 variables used -->
+    <div class="code-note">
+      <span class="highlight">const</span> used for all DOM bindings, configuration, and immutable references.<br>
+      <span class="highlight">let</span> used for mutable score state (<code>homeScore</code> & <code>awayScore</code>).<br>
+      All updates happen via block‑scoped handlers. No <code>var</code> anywhere.
+    </div>
+    <div class="footer">
+      ⚡ click any button → state updates via ES6 block-scoped variables
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      "use strict";
+
+      /* ---------- STATE MANAGEMENT WITH let (block scoped) ---------- */
+      // Mutable state: only these two variables hold the current scores.
+      let homeScore = 0;
+      let awayScore = 0;
+
+      /* ---------- CONST BINDINGS: DOM elements, config, helpers ---------- */
+      // All const: these references never change.
+      const homeDisplay = document.getElementById('homeScoreDisplay');
+      const awayDisplay = document.getElementById('awayScoreDisplay');
+      const stateDisplay = document.getElementById('stateDisplay');
+
+      // helper const to format state text (pure function)
+      const formatState = () => `home = ${homeScore} · away = ${awayScore}`;
+
+      // update UI function (reads current let variables)
+      const updateUI = () => {
+        homeDisplay.textContent = homeScore;
+        awayDisplay.textContent = awayScore;
+        stateDisplay.textContent = formatState();
+      };
+
+      // boundary checks (optional, but keeps scores non-negative)
+      const clampScore = (value) => Math.max(0, value);
+
+      /* ---------- EVENT HANDLERS (all const functions) ---------- */
+      // HOME actions
+      const homePlus1 = () => {
+        homeScore += 1;
+        updateUI();
+      };
+      const homePlus2 = () => {
+        homeScore += 2;
+        updateUI();
+      };
+      const homePlus3 = () => {
+        homeScore += 3;
+        updateUI();
+      };
+      const homeMinus1 = () => {
+        homeScore = clampScore(homeScore - 1);
+        updateUI();
+      };
+      const homeReset = () => {
+        homeScore = 0;
+        updateUI();
+      };
+
+      // AWAY actions
+      const awayPlus1 = () => {
+        awayScore += 1;
+        updateUI();
+      };
+      const awayPlus2 = () => {
+        awayScore += 2;
+        updateUI();
+      };
+      const awayPlus3 = () => {
+        awayScore += 3;
+        updateUI();
+      };
+      const awayMinus1 = () => {
+        awayScore = clampScore(awayScore - 1);
+        updateUI();
+      };
+      const awayReset = () => {
+        awayScore = 0;
+        updateUI();
+      };
+
+      // global actions
+      const swapTeams = () => {
+        // uses block-scoped destructuring assignment (ES6)
+        const temp = homeScore;
+        homeScore = awayScore;
+        awayScore = temp;
+        updateUI();
+      };
+
+      const globalReset = () => {
+        homeScore = 0;
+        awayScore = 0;
+        updateUI();
+      };
+
+      /* ---------- ATTACHING CONST BUTTON REFERENCES ---------- */
+      // All button references stored with const.
+      const homePlus1Btn = document.getElementById('homePlus1');
+      const homePlus2Btn = document.getElementById('homePlus2');
+      const homePlus3Btn = document.getElementById('homePlus3');
+      const homeMinus1Btn = document.getElementById('homeMinus1');
+      const homeResetBtn = document.getElementById('homeReset');
+
+      const awayPlus1Btn = document.getElementById('awayPlus1');
+      const awayPlus2Btn = document.getElementById('awayPlus2');
+      const awayPlus3Btn = document.getElementById('awayPlus3');
+      const awayMinus1Btn = document.getElementById('awayMinus1');
+      const awayResetBtn = document.getElementById('awayReset');
+
+      const swapBtn = document.getElementById('swapTeams');
+      const globalResetBtn = document.getElementById('globalReset');
+
+      // Add event listeners (all using const functions)
+      homePlus1Btn.addEventListener('click', homePlus1);
+      homePlus2Btn.addEventListener('click', homePlus2);
+      homePlus3Btn.addEventListener('click', homePlus3);
+      homeMinus1Btn.addEventListener('click', homeMinus1);
+      homeResetBtn.addEventListener('click', homeReset);
+
+      awayPlus1Btn.addEventListener('click', awayPlus1);
+      awayPlus2Btn.addEventListener('click', awayPlus2);
+      awayPlus3Btn.addEventListener('click', awayPlus3);
+      awayMinus1Btn.addEventListener('click', awayMinus1);
+      awayResetBtn.addEventListener('click', awayReset);
+
+      swapBtn.addEventListener('click', swapTeams);
+      globalResetBtn.addEventListener('click', globalReset);
+
+      // initial UI sync
+      updateUI();
+
+      // extra: demonstrate block scope inside loops or conditions (just for show)
+      // We can safely use let in a block, e.g., we could attach debug but not needed.
+      if (true) {
+        // this is a block, any 'let' here would be scoped, but we don't need.
+        // just proving we are using block-scoped primitives.
+        const version = 'ES6';  // const block scoped
+        console.log(`Scoreboard running (${version}) – home: ${homeScore}, away: ${awayScore}`);
+      }
+      // console.log(version); // would throw ReferenceError – demonstrating block scope.
+    })();
+  </script>
+</body>
+</html>

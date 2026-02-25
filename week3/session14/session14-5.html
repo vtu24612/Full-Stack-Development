@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pizza Promise — Order Simulation</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    :root {
+      --bg: linear-gradient(145deg, #11232f, #07141a);
+      --card: rgba(255, 245, 230, 0.06);
+      --accent: #ffb986;
+      --btn: #d9835c;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .pizza-card {
+      max-width: 650px;
+      width: 100%;
+      background: var(--card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 4rem 4rem 3.5rem 3.5rem;
+      padding: 2.5rem 2rem 2.8rem;
+      border: 1px solid rgba(255, 180, 120, 0.25);
+      box-shadow: 0 40px 60px -10px #030b12;
+      color: #fae9d7;
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #ffb986, #ff9472);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sub {
+      color: #cfa88b;
+      border-bottom: 2px solid #ac745b;
+      padding-bottom: 0.8rem;
+      margin-bottom: 2rem;
+      font-size: 1.2rem;
+    }
+
+    .order-panel {
+      background: #1f3241;
+      border-radius: 2.5rem;
+      padding: 2rem 1.8rem;
+      border: 1px solid #be8b70;
+      margin-bottom: 2rem;
+    }
+
+    .pizza-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .pizza-option {
+      background: #2b3f4f;
+      border-radius: 60px;
+      padding: 0.8rem 1.8rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: 0.1s;
+      border: 1px solid #e0a380;
+      color: white;
+    }
+
+    .pizza-option.selected {
+      background: #bb6b5c;
+      border-color: #ffc489;
+      box-shadow: 0 0 0 3px #bb6b5c30;
+    }
+
+    .btn-order {
+      background: var(--btn);
+      border: none;
+      color: white;
+      font-weight: 800;
+      padding: 1.2rem 2.5rem;
+      border-radius: 60px;
+      font-size: 1.6rem;
+      cursor: pointer;
+      transition: 0.1s;
+      box-shadow: 0 6px 0 #8b523a;
+      width: 100%;
+      border: 1px solid #faba8f;
+    }
+
+    .btn-order:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #8b523a;
+    }
+
+    .btn-order:disabled {
+      opacity: 0.4;
+      transform: none;
+      box-shadow: 0 4px 0 #5f3f30;
+      cursor: not-allowed;
+    }
+
+    .status-stage {
+      background: #152b38;
+      border-radius: 2rem;
+      padding: 1.5rem;
+      border: 1px solid #c58f74;
+      min-height: 180px;
+    }
+
+    .status-title {
+      font-weight: 600;
+      color: #ffd9b5;
+      margin-bottom: 0.5rem;
+      font-size: 1.3rem;
+    }
+
+    .log-area {
+      background: #0f1f2b;
+      border-radius: 1.5rem;
+      padding: 1.2rem 1.5rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 1rem;
+      color: #bdd9e5;
+      height: 150px;
+      overflow-y: auto;
+      border: 1px solid #a5715b;
+      line-height: 1.6;
+    }
+
+    .log-entry {
+      margin: 0.2rem 0;
+      border-left: 3px solid #dd8d68;
+      padding-left: 0.8rem;
+    }
+
+    .footnote {
+      margin-top: 1.8rem;
+      text-align: center;
+      color: #b3927d;
+    }
+
+    .promise-badge {
+      background: #714e3a;
+      padding: 0.3rem 1.2rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      color: #ffcba6;
+    }
+  </style>
+</head>
+<body>
+  <div class="pizza-card">
+    <h1>
+      🍕 pizza promise
+      <span class="promise-badge">async / resolve / reject</span>
+    </h1>
+    <div class="sub">order simulation with JavaScript Promises</div>
+
+    <!-- order controls -->
+    <div class="order-panel">
+      <div style="font-weight: 600; font-size: 1.4rem;">🍽️ choose pizza</div>
+      <div class="pizza-selector" id="pizzaSelector">
+        <!-- dynamically generated but also static markup (we'll keep both) -->
+        <div class="pizza-option" data-pizza="margherita">🍅 margherita</div>
+        <div class="pizza-option" data-pizza="pepperoni">🍕 pepperoni</div>
+        <div class="pizza-option" data-pizza="veggie">🥦 veggie</div>
+        <div class="pizza-option" data-pizza="hawaiian">🍍 hawaiian</div>
+      </div>
+
+      <button class="btn-order" id="orderBtn">🔥 order now</button>
+    </div>
+
+    <!-- status / promise log -->
+    <div class="status-stage">
+      <div class="status-title">📋 order log (promise lifecycle)</div>
+      <div class="log-area" id="logArea">
+        <div class="log-entry">⚡ ready to order ...</div>
+      </div>
+    </div>
+
+    <!-- extra info -->
+    <div class="footnote">
+      <span class="promise-badge">📦 Promise</span> simulates prep: knead → sauce → cheese → bake (random fail 20%)
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      "use strict";
+
+      // ----- DOM elements -----
+      const pizzaOptions = document.querySelectorAll('.pizza-option');
+      const orderBtn = document.getElementById('orderBtn');
+      const logArea = document.getElementById('logArea');
+
+      // ----- state for selected pizza (using let) -----
+      let selectedPizza = 'margherita';  // default selection
+
+      // highlight default (margherita)
+      pizzaOptions.forEach(opt => {
+        if (opt.dataset.pizza === selectedPizza) {
+          opt.classList.add('selected');
+        }
+
+        opt.addEventListener('click', () => {
+          // remove selected class from all
+          pizzaOptions.forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+          selectedPizza = opt.dataset.pizza;
+          addLog(`🍕 selected: ${selectedPizza}`);
+        });
+      });
+
+      // ----- helper to add log entries -----
+      function addLog(message, isError = false) {
+        const entry = document.createElement('div');
+        entry.className = 'log-entry';
+        if (isError) {
+          entry.style.color = '#ff9f8c';
+          entry.style.borderLeftColor = '#ff6b5b';
+        } else {
+          entry.style.color = '#bdd9e5';
+        }
+        entry.textContent = `⏱️ ${new Date().toLocaleTimeString('en-US', { minute: '2-digit', second: '2-digit' })} · ${message}`;
+        logArea.appendChild(entry);
+        // auto-scroll to bottom
+        logArea.scrollTop = logArea.scrollHeight;
+      }
+
+      // ----- clear log (optional) but we just append
+
+      // ----- PROMISE-BASED PIZZA MAKING SIMULATION -----
+      function preparePizza(pizzaType) {
+        // Returns a Promise. Simulates steps with random failure (20% chance)
+        return new Promise((resolve, reject) => {
+          addLog(`[🍕] starting order for ${pizzaType}...`);
+
+          // step 1: knead dough (always ok)
+          setTimeout(() => {
+            addLog(`🫓 kneading dough for ${pizzaType}...`);
+            
+            // step 2: spread sauce (still ok)
+            setTimeout(() => {
+              addLog(`🍅 spreading tomato sauce...`);
+
+              // step 3: add toppings (depends on pizza)
+              setTimeout(() => {
+                addLog(`🧀 adding ${pizzaType} toppings & cheese...`);
+
+                // step 4: bake – may fail (20% chance)
+                setTimeout(() => {
+                  const random = Math.random();
+                  if (random < 0.2) {  // 20% failure
+                    reject(new Error(`🔥 oven too hot! ${pizzaType} burned.`));
+                  } else {
+                    resolve(`✅ ${pizzaType} pizza is ready! 🍕 (baked perfectly)`);
+                  }
+                }, 800); // bake time
+              }, 600); // toppings
+            }, 500); // sauce
+          }, 600); // knead
+        });
+      }
+
+      // ----- order button handler (uses promise) -----
+      function handleOrder() {
+        if (!selectedPizza) {
+          addLog('⚠️ no pizza selected', true);
+          return;
+        }
+
+        // disable button during order
+        orderBtn.disabled = true;
+        orderBtn.textContent = '⏳ preparing ...';
+
+        addLog(`🌟 order placed for ${selectedPizza}. waiting for promise...`);
+
+        // call the promise
+        preparePizza(selectedPizza)
+          .then((successMessage) => {
+            // resolve branch
+            addLog(`✅ ${successMessage}`);
+            addLog(`🎉 enjoy your ${selectedPizza}!`);
+          })
+          .catch((error) => {
+            // reject branch
+            addLog(`❌ error: ${error.message}`, true);
+            addLog(`😢 please reorder, we'll make it right.`);
+          })
+          .finally(() => {
+            // re-enable button
+            orderBtn.disabled = false;
+            orderBtn.textContent = '🔥 order now';
+            addLog(`✨ promise settled (${selectedPizza} attempt finished)`);
+          });
+      }
+
+      // attach event to order button
+      orderBtn.addEventListener('click', handleOrder);
+
+      // initial log
+      addLog('🍕 promise pizza system ready. select a pizza and order.');
+
+      // optional: simulate an order with margherita after 1 sec (just for demo)
+      // but we don't want to auto-order, but we could show a hint. Not needed.
+    })();
+  </script>
+</body>
+</html>

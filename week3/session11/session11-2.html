@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Blog — Web Video & Audio</title>
+    <style>
+        body { max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; background-color: #fff8f0; }
+        article { background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #8e44ad; }
+        .media-container { margin: 25px 0; background: #000; padding: 10px; border-radius: 5px; text-align: center; }
+        video, audio { width: 100%; }
+        .caption { font-size: 0.9rem; color: #666; font-style: italic; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <article>
+        <header>
+                <h1>Media Blog — Web 3.0 Insights</h1>
+            <p>By <em>Full Stack Developer</em> | Feb 2026</p>
+        </header>
+
+        <section>
+            <p>In this episode of our blog, we explore the integration of high-definition media directly into the DOM using HTML5 elements.</p>
+            
+            <div class="media-container">
+                <video controls poster="https://via.placeholder.com/800x450?text=Video+Stream+Preview">
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <div class="caption">Figure 1: HTML5 Video Streaming Controls</div>
+            </div>
+
+            <p>Below is the accompanying podcast interview discussing these architectural shifts.</p>
+
+            <div class="media-container" style="background: #eee;">
+                <audio controls>
+                    <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <div class="caption">Audio: Expert Interview - Audio Playback Interface</div>
+            </div>
+        </section>
+    </article>
+</body>
+</html>

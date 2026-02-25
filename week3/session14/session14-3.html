@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destructuring — ES6 Patterns</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: linear-gradient(145deg, #0f2334 0%, #071629 100%);
+      --card-bg: rgba(255,255,255,0.06);
+      --accent: #f6e5b3;
+      --muted: #9bb7da;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .destruct-card {
+      max-width: 800px;
+      width: 100%;
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 3.5rem;
+      padding: 2.2rem 2rem 2.8rem;
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #edf4ff;
+      box-shadow: 0 40px 60px -20px #00000080;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      background: linear-gradient(120deg, var(--accent), #bdd8ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .sub {
+      color: #9bb7da;
+      border-bottom: 2px solid #2a4b72;
+      padding-bottom: 1rem;
+      margin-bottom: 2rem;
+      font-size: 1.1rem;
+    }
+
+    .code-panel {
+      background: #0b1b2b;
+      border-radius: 2.5rem;
+      padding: 1.5rem 1.8rem;
+      border: 1px solid #355c81;
+      margin-bottom: 2rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 1.1rem;
+      box-shadow: inset 0 2px 10px #03070c;
+    }
+
+    .comment {
+      color: #a0c0d8;
+    }
+
+    .keyword {
+      color: #ffb86b;
+    }
+
+    .var {
+      color: #a8d5ff;
+    }
+
+    .prop {
+      color: #d4bfff;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8rem;
+      margin: 2rem 0;
+    }
+
+    .destruct-box {
+      background: #122b41;
+      border-radius: 2.2rem;
+      padding: 1.5rem 1.5rem 1.8rem;
+      border: 1px solid #376184;
+      box-shadow: 0 8px 0 #082030;
+    }
+
+    .box-title {
+      font-size: 1.6rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #fbde9e;
+    }
+
+    .original {
+      background: #1d3a54;
+      border-radius: 1.8rem;
+      padding: 1.2rem;
+      border: 1px solid #5c85aa;
+      font-family: monospace;
+      font-size: 1rem;
+      margin-bottom: 1.2rem;
+      word-break: break-word;
+      color: #bedcff;
+    }
+
+    .extracted {
+      background: #193e58;
+      border-radius: 1.8rem;
+      padding: 1.2rem 1.5rem;
+      border: 1px solid #6d97bd;
+      font-weight: 500;
+      font-size: 1.1rem;
+    }
+
+    .extracted span {
+      color: #fbd26a;
+      font-weight: 700;
+    }
+
+    .label-badge {
+      background: #224e73;
+      color: white;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      margin-left: 0.5rem;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: #8fadcf;
+      border-top: 1px solid #2c5075;
+      padding-top: 1.5rem;
+      margin-top: 2rem;
+      font-size: 0.95rem;
+    }
+
+    .btn-reveal {
+      background: #2d638b;
+      border: none;
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.1s;
+      box-shadow: 0 4px 0 #123853;
+      border: 1px solid #699ac2;
+      margin-top: 1rem;
+    }
+
+    .btn-reveal:hover {
+      background: #1d4a6d;
+    }
+    :root {
+      --bg: linear-gradient(145deg, #0f2334 0%, #071629 100%);
+      --card-bg: rgba(255,255,255,0.06);
+      --accent: #f6e5b3;
+      --muted: #9bb7da;
+    }
+  </style>
+</head>
+<body>
+  <div class="destruct-card">
+    <h1>
+      📦 destructuring ES6
+      <span class="label-badge">no dot · no indices</span>
+    </h1>
+    <div class="sub">object + array destructuring without traditional notation</div>
+
+    <!-- code preview showing destructuring syntax -->
+    <div class="code-panel">
+      <div><span class="keyword">const</span> <span class="var">person</span> = { <span class="prop">name</span>: <span class="comment">'Alex'</span>, <span class="prop">age</span>: <span class="comment">28</span>, <span class="prop">city</span>: <span class="comment">'Austin'</span>, <span class="prop">job</span>: <span class="comment">'dev'</span> };</div>
+      <div><span class="keyword">const</span> <span class="var">colors</span> = [<span class="comment">'#f94144'</span>, <span class="comment">'#577590'</span>, <span class="comment">'#43aa8b'</span>, <span class="comment">#f9c74f</span>];</div>
+      <div style="margin-top:10px;">→ <span class="keyword">const</span> { <span class="prop">name</span>, <span class="prop">city</span>, <span class="prop">job</span> } = <span class="var">person</span>;</div>
+      <div>→ <span class="keyword">const</span> [ <span class="prop">primary</span>, , <span class="prop">secondary</span>, <span class="prop">accent</span> ] = <span class="var">colors</span>;</div>
+    </div>
+
+    <!-- complex object & array displayed -->
+    <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; margin-bottom: 0.5rem;">
+      <div class="original" style="flex:1;">🧍 <strong>object</strong> = { name: "Alex", age: 28, city: "Austin", job: "dev", skills: ["react", "node"], zip: 78701 }</div>
+      <div class="original" style="flex:1;">🎨 <strong>array</strong> = ["#f94144", "#577590", "#43aa8b", "#f9c74f", "#f9844a"]</div>
+    </div>
+
+    <!-- extracted results via destructuring (no dot/indices) -->
+    <div class="grid-2">
+      <!-- OBJECT DESTRUCTURING block -->
+      <div class="destruct-box">
+        <div class="box-title">🔹 object destructuring</div>
+        <div class="extracted" id="objectResult">
+          <span>name</span>: loading...<br>
+          <span>city</span>: ...<br>
+          <span>job</span>: ...
+        </div>
+        <div style="margin-top: 1rem; font-size:0.9rem; opacity:0.9;">
+          ⚡ <code>{ name, city, job } = person</code> (no <code>person.name</code>)
+        </div>
+      </div>
+
+      <!-- ARRAY DESTRUCTURING block (skipping indices) -->
+      <div class="destruct-box">
+        <div class="box-title">🔸 array destructuring</div>
+        <div class="extracted" id="arrayResult">
+          <span>primary</span>: ...<br>
+          <span>secondary</span>: ...<br>
+          <span>accent</span>: ...
+        </div>
+        <div style="margin-top: 1rem; font-size:0.9rem; opacity:0.9;">
+          ⚡ <code>[ primary, , secondary, accent ] = colors</code> (skipped index 1)
+        </div>
+      </div>
+    </div>
+
+    <!-- extra example: nested object and default values (still no dot) -->
+    <div style="background: #193a52; border-radius: 2rem; padding: 1.5rem; border:1px solid #5982a6;">
+      <div style="font-weight:700; margin-bottom:0.8rem;">🧪 extra destructuring (nested + default)</div>
+      <div id="nestedResult" style="font-family: monospace; background: #0d2438; padding: 1rem; border-radius: 1.5rem;">
+        computing...
+      </div>
+    </div>
+
+    <!-- button to refresh / show destructuring (just for demo, but it's static, though we re-run to be safe) -->
+    <div style="display: flex; justify-content: center; margin: 2rem 0 0.5rem;">
+      <button class="btn-reveal" id="destructBtn">✨ run destructuring again</button>
+    </div>
+
+    <div class="footer-note">
+      ✅ ES6 object & array destructuring • no dot notation (person.name) • no index numbers (colors[2]) <br>
+      all extractions use <code>{ property }</code> and <code>[ element ]</code> syntax.
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      "use strict";
+
+      /* ---------- COMPLEX OBJECT (with nested data) ---------- */
+      const person = {
+        name: 'Alex',
+        age: 28,
+        city: 'Austin',
+        job: 'dev',
+        skills: ['react', 'node', 'ts'],
+        address: {
+          zip: 78701,
+          street: '5th Ave'
+        },
+        meta: {
+          memberSince: 2022,
+          active: true
+        }
+      };
+
+      /* ---------- ARRAY (with colors) ---------- */
+      const colors = ['#f94144', '#577590', '#43aa8b', '#f9c74f', '#f9844a'];
+
+      /* ---------- 1. OBJECT DESTRUCTURING (extract without dot) ---------- */
+      // Extracting specific properties: name, city, job
+      const { name, city, job } = person;
+
+      // Also extract nested property (address.zip) using destructuring + default
+      const { address: { zip } = {} } = person;   // nested destructuring
+      
+      // use default for non-existing (extract 'country' with default)
+      const { country = 'USA' } = person;  // no country in object, default works
+
+      // 2. ARRAY DESTRUCTURING (skip index 1, assign to primary, secondary, accent)
+      // we want: primary = first, secondary = third, accent = fourth.
+      const [primary, , secondary, accent] = colors;   // skips '#577590'
+
+      // also extract the last element using rest? but we don't need, but can show
+      const [,,, lastExtracted] = colors;  // fourth element
+
+      /* ---------- EXTRA NESTED + DEFAULT demo ---------- */
+      // Destructuring nested object + default values
+      const {
+        meta: { memberSince, active },
+        skills: [firstSkill, secondSkill],
+        // provide default for optional 'nickname'
+        nickname = 'N/A'
+      } = person;
+
+      /* ---------- UPDATE UI WITH TEMPLATE LITERALS ---------- */
+      const objectResult = document.getElementById('objectResult');
+      const arrayResult = document.getElementById('arrayResult');
+      const nestedResult = document.getElementById('nestedResult');
+
+      function updateUI() {
+        // object destructuring results
+        objectResult.innerHTML = `
+          <span>name</span>: ${name}<br>
+          <span>city</span>: ${city}<br>
+          <span>job</span>: ${job}<br>
+          <span style="color:#a5d6ff;">zip</span>: ${zip} (nested)<br>
+          <span style="color:#a5d6ff;">country</span>: ${country} (default)
+        `;
+
+        // array destructuring results (no indices used)
+        arrayResult.innerHTML = `
+          <span>primary</span> (index 0): ${primary}<br>
+          <span>secondary</span> (index 2): ${secondary}<br>
+          <span>accent</span> (index 3): ${accent}<br>
+          <span style="color:#a5d6ff;">last</span> (index 3 again): ${lastExtracted} (destructured)
+        `;
+
+        // nested + default extractions
+        nestedResult.innerHTML = `
+          📦 member since: ${memberSince} <br>
+          🔋 active: ${active} <br>
+          🛠️ first skill: ${firstSkill}, second: ${secondSkill} <br>
+          🏷️ nickname (default): ${nickname}
+        `;
+      }
+
+      // initial call
+      updateUI();
+
+      // button just re-runs the same update (no change in data, but reinforces)
+      document.getElementById('destructBtn').addEventListener('click', () => {
+        updateUI();
+        // short animation feedback
+        const btn = document.getElementById('destructBtn');
+        btn.textContent = '✅ destructured!';
+        setTimeout(() => { btn.textContent = '✨ run destructuring again'; }, 800);
+      });
+
+      // Also prove we never used dot notation inside this script after destructuring.
+      // All displays use the extracted constants.
+      console.log('Destructured name (no dot):', name);
+      console.log('Destructured primary color (no index):', primary);
+    })();
+  </script>
+</body>
+</html>
