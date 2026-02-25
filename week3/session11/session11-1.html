@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem 1: Semantic Layout Configurations</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: grid; grid-template-columns: 250px 1fr; grid-template-rows: auto 1fr auto; min-height: 100vh; }
+        header { grid-column: 1 / -1; background: #2c3e50; color: white; padding: 1rem; text-align: center; }
+        nav { background: #ecf0f1; padding: 20px; border-right: 2px solid #bdc3c7; } /* Fixed Sidebar */
+        main { padding: 30px; background: #fff; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+        .card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #f9f9f9; }
+        footer { grid-column: 1 / -1; background: #2c3e50; color: white; text-align: center; padding: 10px; }
+        ul { list-style: none; padding: 0; }
+        li { margin-bottom: 15px; }
+        a { text-decoration: none; color: #34495e; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard - Semantic Layout</h1>
+    </header>
+
+    <nav>
+        <h3>Navigation</h3>
+        <ul>
+            <li><a href="#profile">User Profile</a></li>
+            <li><a href="#settings">System Settings</a></li>
+            <li><a href="#reports">Analytics Reports</a></li>
+        </ul>
+    </nav>
+
+    <main>
+        <section>
+            <h2>Main Content Area</h2>
+            <p>This layout utilizes a <strong>Fixed Sidebar</strong> on the left and a <strong>Grid-based</strong> content area below.</p>
+            
+            <div class="grid-container">
+                <article class="card"><h3>Module A</h3><p>Semantic grid item.</p></article>
+                <article class="card"><h3>Module B</h3><p>Semantic grid item.</p></article>
+                <article class="card"><h3>Module C</h3><p>Semantic grid item.</p></article>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Vel Tech Rangarajan Dr. Sagunthala R&D Institute of Science and Technology</p>
+    </footer>
+</body>
+</html>

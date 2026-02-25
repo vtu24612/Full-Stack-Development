@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>arrow function · generateReceipt (price, tip)</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #f2efe9 0%, #e8e2d8 100%);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .receipt-card {
+      max-width: 700px;
+      width: 100%;
+      background: #fffcf7;
+      border-radius: 3.5rem 3.5rem 3rem 3rem;
+      box-shadow: 0 30px 50px -20px #806d5a80;
+      padding: 2.5rem 2.2rem;
+      border: 1px solid #f0e3d5;
+    }
+
+    h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #2d2a24;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 3px dashed #d9c9b8;
+      padding-bottom: 0.8rem;
+    }
+
+    h1 span {
+      background: #244e6e;
+      color: white;
+      font-size: 1.2rem;
+      padding: 0.2rem 1.2rem;
+      border-radius: 60px;
+      font-weight: 500;
+    }
+
+    .sub {
+      color: #5e5347;
+      margin: 0.5rem 0 2rem 0;
+      font-size: 1.2rem;
+    }
+
+    .code-block {
+      background: #1d2b36;
+      color: #d4e0f0;
+      padding: 1.2rem 2rem;
+      border-radius: 3rem;
+      font-family: 'Fira Code', monospace;
+      font-size: 1.2rem;
+      margin-bottom: 2.5rem;
+      border: 1px solid #5d7995;
+      box-shadow: inset 0 2px 5px #0f1a21;
+      word-break: break-word;
+    }
+
+    .function-name {
+      color: #f7d478;
+    }
+
+    .param {
+      color: #b2e0b2;
+    }
+
+    /* input panel */
+    .input-panel {
+      background: #efe7dd;
+      border-radius: 2.5rem;
+      padding: 2rem 1.8rem;
+      border: 1px solid #ddcfc0;
+      margin-bottom: 2rem;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .row label {
+      font-weight: 600;
+      color: #3b362f;
+      min-width: 80px;
+      font-size: 1.2rem;
+    }
+
+    input {
+      flex: 1;
+      padding: 0.9rem 1.4rem;
+      border: 2px solid #cbbaa9;
+      border-radius: 60px;
+      font-size: 1.2rem;
+      background: white;
+      font-family: inherit;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #727e8c;
+      box-shadow: 0 0 0 3px #bec9d4;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin: 1.8rem 0 1rem;
+    }
+
+    .btn {
+      background: #345e7e;
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 1rem 2.2rem;
+      border-radius: 60px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      transition: background 0.1s;
+      box-shadow: 0 5px 0 #1a3649;
+      flex: 1 1 auto;
+      border: 1px solid #6386a5;
+    }
+
+    .btn:hover {
+      background: #234b67;
+    }
+
+    .btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 1px 0 #1a3649;
+    }
+
+    .btn.sample {
+      background: #5f6d46;
+      box-shadow: 0 5px 0 #3f4a2d;
+    }
+
+    /* receipt display */
+    .receipt-output {
+      background: #dbd0c2;
+      border-radius: 2rem;
+      padding: 1.8rem 2rem;
+      border: 2px solid #b9aa99;
+      font-size: 1.4rem;
+      box-shadow: inset 0 2px 8px #aa9e8e;
+    }
+
+    .receipt-title {
+      font-weight: 700;
+      color: #2f4a5e;
+      margin-bottom: 0.5rem;
+      font-size: 1.5rem;
+    }
+
+    .message-box {
+      background: #fefcf9;
+      padding: 1.5rem 1.8rem;
+      border-radius: 1.8rem;
+      border: 1px solid #b2a18d;
+      font-family: 'Courier New', monospace;
+      font-size: 1.3rem;
+      color: #1d2f3f;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: 0 4px 0 #928370;
+    }
+
+    .footnote {
+      text-align: center;
+      margin-top: 2rem;
+      color: #5e5245;
+      font-size: 0.95rem;
+    }
+
+    .arrow-badge {
+      background: #413a32;
+      color: #fadc9f;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="receipt-card">
+    <h1>
+      🧾 generateReceipt 
+      <span>arrow</span>
+    </h1>
+    <div class="sub">price + tip → total (template literal)</div>
+
+    <!-- function signature display -->
+    <div class="code-block">
+      <span class="function-name">const</span> generateReceipt = (<span class="param">price</span>, <span class="param">tip</span>) => { <br>
+      &nbsp;&nbsp;const total = price + tip;<br>
+      &nbsp;&nbsp;return `Receipt: $${price} + $${tip} tip = $${total}`;<br>
+      }
+    </div>
+
+    <!-- interactive panel -->
+    <div class="input-panel">
+      <div class="row">
+        <label>💰 price ($)</label>
+        <input type="number" id="priceInput" value="45.50" min="0" step="0.01" placeholder="e.g., 32.80">
+      </div>
+      <div class="row">
+        <label>🎁 tip ($)</label>
+        <input type="number" id="tipInput" value="8.50" min="0" step="0.01" placeholder="e.g., 5.25">
+      </div>
+
+      <div class="button-group">
+        <button class="btn" id="generateBtn">🧾 generate receipt</button>
+        <button class="btn sample" id="sampleBtn">✨ try sample (15.99 + 3.50)</button>
+      </div>
+    </div>
+
+    <!-- receipt message area (updated via arrow function) -->
+    <div class="receipt-output">
+      <div class="receipt-title">📋 receipt message</div>
+      <div class="message-box" id="receiptMessage">
+        Receipt: $45.50 + $8.50 tip = $54.00
+      </div>
+    </div>
+
+    <!-- footer with arrow explanation -->
+    <div class="footnote">
+      ⚡ <span class="arrow-badge">arrow function</span> · uses template literal `${price} + ${tip} = ${total}`<br>
+      const total = price + tip (automatically parsed as numbers)
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      "use strict";
+
+      /* ---------- ARROW FUNCTION (exactly as requested) ---------- */
+      // generateReceipt takes price and tip, calculates total, returns template string.
+      const generateReceipt = (price, tip) => {
+        // price and tip are expected to be numbers (we'll coerce to float)
+        const numericPrice = Number(price);
+        const numericTip = Number(tip);
+        const total = numericPrice + numericTip;
+        // template literal with currency formatting (2 decimals)
+        return `Receipt: $${numericPrice.toFixed(2)} + $${numericTip.toFixed(2)} tip = $${total.toFixed(2)}`;
+      };
+
+      /* ---------- CONST DOM REFERENCES ---------- */
+      const priceInput = document.getElementById('priceInput');
+      const tipInput = document.getElementById('tipInput');
+      const receiptMessage = document.getElementById('receiptMessage');
+      const generateBtn = document.getElementById('generateBtn');
+      const sampleBtn = document.getElementById('sampleBtn');
+
+      /* ---------- HELPER (also const) ---------- */
+      const updateReceiptFromInputs = () => {
+        // read current values (strings) from inputs
+        const priceStr = priceInput.value.trim() === '' ? '0' : priceInput.value;
+        const tipStr = tipInput.value.trim() === '' ? '0' : tipInput.value;
+        
+        // convert to numbers (float)
+        const price = parseFloat(priceStr) || 0;
+        const tip = parseFloat(tipStr) || 0;
+
+        // call the arrow function!
+        const message = generateReceipt(price, tip);
+        receiptMessage.textContent = message;
+      };
+
+      // sample preset
+      const setSampleValues = () => {
+        priceInput.value = '15.99';
+        tipInput.value = '3.50';
+        updateReceiptFromInputs();
+      };
+
+      /* ---------- EVENT LISTENERS (using const functions) ---------- */
+      generateBtn.addEventListener('click', updateReceiptFromInputs);
+      sampleBtn.addEventListener('click', setSampleValues);
+
+      // optional: realtime update on input change? we keep manual, but could add.
+      // we also run once to initialise from default values (45.50 / 8.50)
+      updateReceiptFromInputs();
+
+      // extra demonstration: arrow function with block scope (already done)
+      // also show that `total` is block-scoped (inside the arrow function)
+      // we can't access `total` here because it's not in scope.
+      // but we can prove by calling the function.
+      console.log('test call:', generateReceipt(20, 4.25)); // logs using template
+
+      // additional note: price and tip parameters are block-scoped to the function.
+    })();
+  </script>
+</body>
+</html>

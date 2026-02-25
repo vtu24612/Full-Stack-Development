@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem 3: Advanced Filtering UI</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; gap: 30px; padding: 20px; }
+        aside { width: 300px; background: #f8f9fa; padding: 20px; border: 1px solid #dee2e6; border-radius: 5px; }
+        .filter-group { margin-bottom: 25px; }
+        label { display: block; font-weight: bold; margin-bottom: 8px; }
+        input[type="range"] { width: 100%; }
+        .color-preview { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #000; }
+        .product-grid { flex-grow: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .item { border: 1px solid #ddd; padding: 15px; text-align: center; }
+    </style>
+</head>
+<body>
+    <aside>
+        <h2>Filter Products</h2>
+        <form>
+            <div class="filter-group">
+                <label for="price">Price Range ($0 - $1000):</label>
+                <input type="range" id="price" name="price" min="0" max="1000" step="50">
+            </div>
+
+            <div class="filter-group">
+                <label for="color">Color Palette:</label>
+                <input type="color" id="color" name="color" value="#3498db">
+            </div>
+
+            <div class="filter-group">
+                <label for="brand">Brand Selection:</label>
+                <select id="brand" name="brand" multiple style="width: 100%; height: 80px;">
+                    <option value="nike">Nike</option>
+                    <option value="adidas">Adidas</option>
+                    <option value="puma">Puma</option>
+                    <option value="reebok">Reebok</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Customer Ratings:</label>
+                <input type="checkbox" id="4star"> <label style="display:inline" for="4star">★★★★☆ & Up</label><br>
+                <input type="checkbox" id="3star"> <label style="display:inline" for="3star">★★★☆☆ & Up</label>
+            </div>
+
+            <button type="reset" style="width: 100%; padding: 10px; background: #27ae60; color: white; border: none; cursor: pointer;">Apply Filters</button>
+        </form>
+    </aside>
+
+    <div class="product-grid">
+        <div class="item"><h3>Product Sample 1</h3><p>Price: $250 | ★★★★☆</p></div>
+        <div class="item"><h3>Product Sample 2</h3><p>Price: $450 | ★★★☆☆</p></div>
+        <div class="item"><h3>Product Sample 3</h3><p>Price: $150 | ★★★★★</p></div>
+        <div class="item"><h3>Product Sample 4</h3><p>Price: $800 | ★★☆☆☆</p></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎉 partyList · spread & rest operators</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(145deg, #281e3c, #1f1530);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .party-card {
+      max-width: 750px;
+      width: 100%;
+      background: rgba(255, 245, 240, 0.1);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-radius: 4rem 4rem 3rem 3rem;
+      padding: 2.5rem 2rem 2.8rem;
+      border: 1px solid rgba(255, 200, 150, 0.3);
+      box-shadow: 0 40px 60px -15px #0e0b1a;
+      color: #fbe9d7;
+    }
+
+    h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fccc9e, #ffb3aa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.2rem;
+    }
+
+    .sub {
+      color: #cbaa8b;
+      border-bottom: 3px dashed #a5705e;
+      padding-bottom: 0.8rem;
+      margin-bottom: 2rem;
+      font-size: 1.3rem;
+    }
+
+    .code-block {
+      background: #1a1122;
+      border-radius: 2.5rem;
+      padding: 1.2rem 2rem;
+      border: 1px solid #ad7b6b;
+      font-family: 'Fira Code', monospace;
+      font-size: 1.2rem;
+      color: #fddbb4;
+      margin-bottom: 2.5rem;
+      box-shadow: inset 0 2px 12px #07030a;
+    }
+
+    .token {
+      color: #ffc48c;
+    }
+
+    .list-section {
+      background: #2d1f34;
+      border-radius: 2.5rem;
+      padding: 2rem;
+      border: 1px solid #b38e7b;
+      margin-bottom: 2.2rem;
+    }
+
+    .list-title {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #facba2;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .friend-bubbles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin: 1rem 0 1.5rem;
+    }
+
+    .bubble {
+      background: #5d4267;
+      padding: 0.6rem 1.5rem;
+      border-radius: 60px;
+      font-size: 1.3rem;
+      font-weight: 500;
+      border: 1px solid #e7a885;
+      box-shadow: 0 4px 0 #35273b;
+      color: white;
+    }
+
+    .me-bubble {
+      background: #b84a62;
+      border-color: #ffb185;
+      box-shadow: 0 4px 0 #712f40;
+    }
+
+    .operator-panel {
+      background: #22182b;
+      border-radius: 2rem;
+      padding: 1.5rem 2rem;
+      border: 1px solid #b58d7a;
+      margin: 1.8rem 0;
+    }
+
+    .rest-demo {
+      background: #2e1f3a;
+      border-radius: 2rem;
+      padding: 1.5rem 1.8rem;
+      border: 1px solid #d7a286;
+    }
+
+    .btn-party {
+      background: #bb6b5c;
+      border: none;
+      color: white;
+      font-weight: 700;
+      padding: 1rem 2.5rem;
+      border-radius: 60px;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: 0.1s;
+      box-shadow: 0 5px 0 #6e3f39;
+      border: 1px solid #f09f86;
+      margin-top: 1rem;
+    }
+
+    .btn-party:hover {
+      background: #a25647;
+      transform: translateY(-2px);
+      box-shadow: 0 7px 0 #6e3f39;
+    }
+
+    .footer-note {
+      text-align: center;
+      color: #bd9f8e;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="party-card">
+    <h1>🎊 partyList</h1>
+    <div class="sub">spread · merge · rest operator</div>
+
+    <!-- spread explanation + code snippet -->
+    <div class="code-block">
+      <span class="token">const</span> collegeFriends = ['Sam', 'Jordon', 'Taylor'];<br>
+      <span class="token">const</span> workFriends = ['Casey', 'Morgan', 'Riley'];<br>
+      <span class="token">const</span> partyList = ['Me', ...collegeFriends, ...workFriends];
+    </div>
+
+    <!-- COLLEGE FRIENDS list (array) -->
+    <div class="list-section">
+      <div class="list-title">🎓 collegeFriends</div>
+      <div class="friend-bubbles" id="collegeBubbles"></div>
+
+      <div class="list-title" style="margin-top: 1.5rem;">💼 workFriends</div>
+      <div class="friend-bubbles" id="workBubbles"></div>
+
+      <div class="list-title" style="margin-top: 1.8rem;">🎉 partyList (spread + 'Me' at start)</div>
+      <div class="friend-bubbles" id="partyBubbles"></div>
+    </div>
+
+    <!-- REST OPERATOR demo (function with normal + rest) -->
+    <div class="operator-panel">
+      <div style="font-size: 1.6rem; font-weight: 600; margin-bottom: 1rem;">🔹 rest operator demo</div>
+      <div class="code-block" style="margin-bottom: 0;">
+        <span class="token">function</span> describeParty(host, ...guests) { <br>
+        &nbsp;&nbsp; return `${host} is hosting: ${guests.join(', ')}`; <br>
+        }
+      </div>
+
+      <div class="rest-demo" id="restResult">
+        <!-- filled by js -->
+      </div>
+
+      <button class="btn-party" id="refreshRest">🎭 call with different guests</button>
+    </div>
+
+    <!-- footer -->
+    <div class="footer-note">
+      ✅ spread (…collegeFriends, …workFriends) · rest (…guests) captures remaining args
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      "use strict";
+
+      /* ----- ORIGINAL LISTS (arrays) ----- */
+      const collegeFriends = ['Sam', 'Jordon', 'Taylor'];
+      const workFriends = ['Casey', 'Morgan', 'Riley'];
+
+      /* ----- PARTY LIST: MERGE USING SPREAD + ADD "Me" AT START ----- */
+      // Spread operator merges both arrays, and we add "Me" at the very beginning.
+      const partyList = ['Me', ...collegeFriends, ...workFriends];
+
+      /* ----- FUNCTION WITH NORMAL PARAM + REST OPERATOR ----- */
+      // Normal parameter: host, rest parameter: ...guests (captures all other arguments)
+      function describeParty(host, ...guests) {
+        // If no guests, provide a fallback message
+        if (guests.length === 0) {
+          return `${host} is throwing a solo party 🤍`;
+        }
+        // Use template literal with guests array
+        return `${host} is hosting: ${guests.join(' · ')}`;
+      }
+
+      /* ----- RENDER BUBBLES (helper) ----- */
+      function renderBubbles(containerId, array) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        container.innerHTML = ''; // clear
+        array.forEach(name => {
+          const bubble = document.createElement('span');
+          bubble.className = 'bubble' + (name === 'Me' ? ' me-bubble' : '');
+          bubble.textContent = name;
+          container.appendChild(bubble);
+        });
+      }
+
+      // render initial friend lists
+      renderBubbles('collegeBubbles', collegeFriends);
+      renderBubbles('workBubbles', workFriends);
+      renderBubbles('partyBubbles', partyList);
+
+      /* ----- REST FUNCTION DEMO ----- */
+      const restResultDiv = document.getElementById('restResult');
+
+      function updateRestDemo(...args) {
+        // we will call describeParty with a dynamic host and guests
+        // we can predefine some calls: but use random for fun
+        const hosts = ['Me', 'Alex', 'Jamie', 'Casey'];
+        const possibleGuests = [
+          ['Taylor', 'Sam', 'Morgan'],
+          ['Riley', 'Jordon'],
+          ['Avery', 'Quinn', 'Jordan', 'Casey'],
+          ['Reese', 'Blake']
+        ];
+
+        // pick random host and random guest list
+        const randomHost = hosts[Math.floor(Math.random() * hosts.length)];
+        const randomGuests = possibleGuests[Math.floor(Math.random() * possibleGuests.length)];
+
+        // call the rest function (host is normal param, rest are spread)
+        const message = describeParty(randomHost, ...randomGuests);
+
+        // also show the raw call syntax
+        restResultDiv.innerHTML = `
+          <div style="margin-bottom: 0.8rem; color: #e6c9a8;">📞 <strong>describeParty('${randomHost}', ...${JSON.stringify(randomGuests)})</strong></div>
+          <div style="background: #1e1329; padding: 1rem; border-radius: 1.8rem; font-size: 1.2rem;">✨ ${message}</div>
+          <div style="margin-top:0.8rem; font-size:0.9rem; opacity:0.8;">(rest parameter captured ${randomGuests.length} guests)</div>
+        `;
+      }
+
+      // initial rest demo call
+      updateRestDemo();
+
+      // button to refresh rest demo with new random call
+      document.getElementById('refreshRest').addEventListener('click', updateRestDemo);
+
+      // additional console proof
+      console.log('collegeFriends:', collegeFriends);
+      console.log('workFriends:', workFriends);
+      console.log('partyList (spread + "Me" at start):', partyList);
+
+      // test describeParty with various arguments
+      console.log(describeParty('Me', 'Sam', 'Jordon', 'Taylor'));
+      console.log(describeParty('Alex', 'Riley')); // rest captures one guest
+      console.log(describeParty('Solo')); // rest empty, captures no guests
+
+      // Show that we never mutated original arrays (spread creates new array)
+      console.log('original collegeFriends unchanged:', collegeFriends);
+    })();
+  </script>
+</body>
+</html>
